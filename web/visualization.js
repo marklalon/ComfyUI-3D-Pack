@@ -97,10 +97,10 @@ function createVisualizer(node, inputName, typeName, inputData, app) {
     node.onResize = function () {
         let [w, h] = this.size
         if (w <= 600) w = 600
-        if (h <= 500) h = 500
+        if (h <= 450) h = 450
 
         if (w > 600) {
-            h = w - 100
+            h = w - 150
         }
 
         this.size = [w, h]
@@ -141,7 +141,7 @@ function registerVisualizer(nodeType, nodeData, nodeClassName, typeName){
 
             const result = await createVisualizer.apply(this, [this, nodeName, typeName, {}, app])
 
-            this.setSize([600, 500])
+            this.setSize([600, 450])
 
             return r
         }

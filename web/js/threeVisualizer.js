@@ -29,15 +29,10 @@ const scene = new THREE.Scene();
 scene.background = new THREE.Color( 0x000000 );
 scene.environment = pmremGenerator.fromScene( new RoomEnvironment( renderer ), 0.04 ).texture;
 
-const ambientLight = new THREE.AmbientLight( 0xffffff , 3.0 );
-
 const camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 100 );
 camera.position.set( 5, 2, 8 );
-const pointLight = new THREE.PointLight( 0xffffff, 15 );
-camera.add( pointLight );
 
 const controls = new OrbitControls( camera, renderer.domElement );
-controls.target.set( 0, 0.5, 0 );
 controls.update();
 controls.enablePan = true;
 controls.enableDamping = true;
@@ -116,6 +111,12 @@ async function main(filepath="") {
         if (fileExt == "obj"){
             const loader = new OBJLoader();
 
+            const ambientLight = new THREE.AmbientLight( 0xffffff , 3.0 );
+            scene.add( ambientLight );
+
+            const pointLight = new THREE.PointLight( 0xffffff, 10.0 );
+            camera.add( pointLight );
+
             var mtlFolderpath = filepath.substring(0, Math.max(filepath.lastIndexOf("/"), filepath.lastIndexOf("\\"))) + "/";
             var mtlFilepath = filepathNoExt.replace(/^.*[\\\/]/, '') + ".mtl";
 
@@ -143,10 +144,12 @@ async function main(filepath="") {
             const loader = new GLTFLoader();
             loader.setDRACOLoader( dracoLoader );
 
+            controls.target.set( 0, 0.5, 0 );
+
             loader.load( currentURL, function ( gltf ) {
                 const model = gltf.scene;
-                //model.position.set( 1, 1, 0 );
-                model.scale.set( 3, 3, 3 );
+                model.position.set( 0, 0.5, 0 );
+                model.scale.set( 5, 5, 5 );
 
                 scene.add( model );
                 mixer = new THREE.AnimationMixer(model);
@@ -165,7 +168,6 @@ async function main(filepath="") {
         needUpdate = true;
     }
 
-    scene.add( ambientLight );
     scene.add( camera );
 
     progressDialog.close();
